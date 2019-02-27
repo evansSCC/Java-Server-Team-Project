@@ -3,6 +3,8 @@ body {
     min-width: 500px;
     max-width: 980px;
     text-align: center;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 table {
@@ -12,17 +14,38 @@ table {
 }
 
 th {
-    color: #2E4372;
+    color: #06163A;
     border: solid #06163A 1px;
+    padding: 1px 4px;
 }
 
+td {
+    border: solid #06163A 1px;
+    padding: 1px 4px;
+}
 
 
 .title {
-    color: #12337E;
-    text-shadow: 3px 3px 3px #1F469F;
+    color: #7787AB;
+    text-shadow: 3px 3px 3px #06163A;
 }
 
 form {
-    
+    width: 290px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+label {
+    float: left;
+    width: 80px;
+    text-align: right;
+}
+
+.fieldEntry {
+    margin-bottom: 5px;
+}
+
+.submitButton {
+    margin-top: 10px;
 }
