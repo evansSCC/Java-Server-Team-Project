@@ -1,0 +1,28 @@
+body {
+    background-color: #277652;
+    min-width: 500px;
+    max-width: 980px;
+    text-align: center;
+}
+
+table {
+    margin-left: auto;
+    margin-right: auto;
+    border: solid #06163A 3px;
+}
+
+th {
+    color: #2E4372;
+    border: solid #06163A 1px;
+}
+
+
+
+.title {
+    color: #12337E;
+    text-shadow: 3px 3px 3px #1F469F;
+}
+
+form {
+    
+}
