@@ -31,8 +31,9 @@
             <h2></h2>
             <form action="business/Controller.java">
                 <input type="hidden" name="action" value="process_worksheet">
-                <label for="studentName">Name: </label><input type="text" id="studentName" name="studentName">
-                <label for="studentID">Student ID: </label><input type="text" id="studentID" name="studentID">
+                <label for="studentName">Name: </label><input type="text" id="studentName" name="studentName"><br>
+                <label for="studentID">Student ID: </label><input type="text" id="studentID" name="studentID"><br>
+                <br>
                 <input type="submit" value="Submit">
             </form>
         </div>
