@@ -1,86 +1,146 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package db;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.sql.*;
+import business.Course;
+import business.Student;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
  *
  * @author rg305912
  */
-public class CoursesDB extends HttpServlet {
+public class CoursesDB {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet CoursesDB</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet CoursesDB at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+public static ArrayList<Course> getCourseList(String option) throws Exception{
+    ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        ArrayList<Course> allCourses = new ArrayList();
+        String query = "SELECT * FROM courses" +
+                        "WHERE ? = 'r' OR ? = 'e' ";
+        
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setString(1, option);
+            ps.setString(2, option);
+            rs = ps.executeQuery();
+            Course course = null;
+            if (rs.next()){
+                course = new Course();
+                course.setCourseID(rs.getString("courseID"));
+                course.setCourseName(rs.getString("courseName"));
+                course.setType(rs.getString("type"));
+                course.setCreditHours(rs.getFloat("creditHours"));
+                course.setIntegrated(rs.getString("integrated"));
+                course.setPcWeb(rs.getString("pcWeb"));
+                allCourses.add(course);
+            }
+            
+           return allCourses;
+        }
+         catch (Exception e) {
+            System.out.println(e);
+            throw e;
+        } finally {
+            DBUtil.closePreparedStatement(ps);
+            if(pool != null){pool.freeConnection(connection);}
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
+public static LinkedHashMap searchPlansByStudentID (Student student) throws Exception {
+    ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        LinkedHashMap plansList = new LinkedHashMap();
+        String query = "SELECT planID, date FROM studentPlans" +
+                "WHERE studentID = ?;";
+        
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, student.getStudentID());
+            rs = ps.executeQuery();
+            if (rs.next()){
+                plansList.put(rs.getString("date"), rs.getInt("planID"));
+            }
+            return plansList;
+        }catch (Exception e) {
+            System.out.println(e);
+            throw e;
+        } finally {
+            DBUtil.closePreparedStatement(ps);
+            if(pool != null){pool.freeConnection(connection);}
+        }
+}
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
+public static int addStudentPlan (Student student) throws Exception {
+ ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+        
+        String query = "INSERT INTO studentplans (studentID, fName, lName, date)"+
+                "VALUES (?, ?, ?, ?);";
+        
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, student.getStudentID());
+            ps.setString(2, student.getFirstName());
+            ps.setString(3, student.getLastName());
+            ps.setString(4, LocalDate.now().toString());
+            return ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println(e);
+            throw e;
+        } finally {
+            DBUtil.closePreparedStatement(ps);
+            if(pool != null){pool.freeConnection(connection);}
+        }
+}
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+public static int getPlanID(Student student) throws Exception {
+    ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        String query = "SELECT LAST_INSERT_ID from StudentPlans" +
+                        "WHERE studentID = ?";
+        
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, student.getStudentID());
+            rs = ps.executeQuery();
+            return rs.getInt("LAST_INSERT_ID");
+        } catch (Exception e) {
+            System.out.println(e);
+            throw e;
+        } finally {
+            DBUtil.closePreparedStatement(ps);
+            if(pool != null){pool.freeConnection(connection);}
+        }
+}
 
+public static int addPlan(Student student, ArrayList<Course> plan) throws Exception {
+    ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+        
+        String query = "INSERT INTO planData";
+        
+        try {
+            ps = connection.prepareStatement(query);
+            return ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println(e);
+            throw e;
+        } finally {
+            DBUtil.closePreparedStatement(ps);
+            if(pool != null){pool.freeConnection(connection);}
+        }
+}
+    
+    
 }
