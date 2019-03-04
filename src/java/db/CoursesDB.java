@@ -123,15 +123,18 @@ public static int getPlanID(Student student) throws Exception {
         }
 }
 
-public static int addPlan(Student student, ArrayList<Course> plan) throws Exception {
+public static int addCourseToPlan(Course course, int PlanID) throws Exception {
     ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
         
-        String query = "INSERT INTO planData";
+        String query = "INSERT INTO planData (ID, PlanID)" +
+                        "VALUES (?, ?);";
         
         try {
             ps = connection.prepareStatement(query);
+            ps.setInt(1, course.getID());
+            ps.setInt(2, PlanID);
             return ps.executeUpdate();
         } catch (Exception e) {
             System.out.println(e);
