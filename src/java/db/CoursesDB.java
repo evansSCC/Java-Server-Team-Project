@@ -2,8 +2,8 @@
 package db;
 
 import java.sql.*;
-import business.Course;
-import business.Student;
+import data.Course;
+import data.Student;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

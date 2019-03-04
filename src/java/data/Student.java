@@ -1,7 +1,7 @@
-package business;
+package data;
 
 
-import business.Course;
+import data.Course;
 import java.util.ArrayList;
 
 public class Student {
@@ -11,13 +11,14 @@ public class Student {
     private String firstName, lastName;
     private int studentID;
 
-    public Student() {
-    }
-
-    public Student(String firstName, String lastName, int studentID) {
+    public Student(){};
+    
+    public Student(String firstName, String lastName, int studentID, boolean pcWeb, boolean integrated) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.studentID = studentID;
+        this.pcWeb = pcWeb;
+        this.integrated = integrated;
     }
 
     public ArrayList<Course> getCourses() {
@@ -67,6 +68,5 @@ public class Student {
     public void setStudentID(int studentID) {
         this.studentID = studentID;
     }
-    
     
 }
