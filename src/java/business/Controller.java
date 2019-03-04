@@ -56,9 +56,9 @@ public class Controller extends HttpServlet {
                 HashMap<String, String> errors = new HashMap<String, String>();
                 
                 //validate that a focus was selected
-                if(focus.equals("pcWeb")){
+                if(focus != null && focus.equals("pcWeb")){
                     pcWeb = true;
-                } else if(focus.equals("integrated")) {
+                } else if(focus != null  && focus.equals("integrated")) {
                     integrated = true;
                 } else {
                     valid = false;
@@ -85,6 +85,10 @@ public class Controller extends HttpServlet {
                         valid = false;
                         errors.put("student_id", "Please enter a valid integer for studentID");
                     }
+                }
+                
+                if(!valid){
+                    request.setAttribute("errors", errors);
                 }
                 
                 
