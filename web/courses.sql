@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `quarterstosemesters`
+-- Database: `quartertosemesters`
 --
 
 -- --------------------------------------------------------
@@ -59,8 +59,8 @@ ALTER TABLE `courses`
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 
-CREATE TABLE studentPlans
-    PlanID INT NOT NULL PRIMARY KEY UNIQUE AUTO_INCREMENT,
+CREATE TABLE studentPlans (
+    PlanID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     StudentID INT(6) NOT NULL,
     fName VARCHAR(50) NOT NULL,
     lName VARCHAR(50) NOT NULL

@@ -12,13 +12,15 @@ package data;
 public class Course {
 
     private String courseID = "", courseName = "";
-    char pcWeb = 'a', integrated='a', type='a';
+    private String pcWeb = "";
+    private String integrated = "";
+    private String type = "";
     int ID = 0;
     float creditHours = 0;
 
     public Course(){};
     
-    public Course(String courseID, String courseName, char pcWeb, char integrated, char type, int ID, float creditHours) {
+    public Course(String courseID, String courseName, String pcWeb, String integrated, String type, int ID, float creditHours) {
         this.courseID = courseID;
         this.courseName = courseName;
         this.pcWeb = pcWeb;
@@ -45,27 +47,27 @@ public class Course {
         this.courseName = courseName;
     }
 
-    public char getPcWeb() {
+    public String getPcWeb() {
         return pcWeb;
     }
 
-    public void setPcWeb(char pcWeb) {
+    public void setPcWeb(String pcWeb) {
         this.pcWeb = pcWeb;
     }
 
-    public char getIntegrated() {
+    public String getIntegrated() {
         return integrated;
     }
 
-    public void setIntegrated(char integrated) {
+    public void setIntegrated(String integrated) {
         this.integrated = integrated;
     }
 
-    public char getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(char type) {
+    public void setType(String type) {
         this.type = type;
     }
 
@@ -76,5 +78,15 @@ public class Course {
     public void setID(int ID) {
         this.ID = ID;
     }
+
+    public float getCreditHours() {
+        return creditHours;
+    }
+
+    public void setCreditHours(float creditHours) {
+        this.creditHours = creditHours;
+    }
+    
+    
     
 }
