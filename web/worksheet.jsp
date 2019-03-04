@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
     <head>
         <title>Courses Worksheet</title>
@@ -24,7 +25,7 @@
                 <td>4.5</td>
                 <td>PC Web - Required</td>
                 <td>Quarter</td>
-                <td>checkbox</td>
+                <td><input type="checkbox" name="completed" value="INFO-2514"></td>
             </tr>
         </table>
         <div>
