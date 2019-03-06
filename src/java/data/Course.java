@@ -16,11 +16,11 @@ public class Course {
     private String integrated = "";
     private String type = "";
     int ID = 0;
-    float creditHours = 0;
+    double creditHours = 0;
 
     public Course(){};
     
-    public Course(String courseID, String courseName, String pcWeb, String integrated, String type, int ID, float creditHours) {
+    public Course(String courseID, String courseName, String pcWeb, String integrated, String type, int ID, double creditHours) {
         this.courseID = courseID;
         this.courseName = courseName;
         this.pcWeb = pcWeb;
@@ -79,7 +79,7 @@ public class Course {
         this.ID = ID;
     }
 
-    public float getCreditHours() {
+    public double getCreditHours() {
         return creditHours;
     }
 

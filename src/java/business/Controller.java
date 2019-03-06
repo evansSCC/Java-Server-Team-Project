@@ -5,8 +5,10 @@
  */
 package business;
 
+import data.Student;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -41,7 +43,7 @@ public class Controller extends HttpServlet {
         
         switch (action) {
             case "default":
-                url = "/worksheet.jsp";
+                url = "/studentInfo.jsp";
                 break;
             case "initialize_user":
                 String firstName = request.getParameter("first_name");
@@ -53,7 +55,7 @@ public class Controller extends HttpServlet {
                 String focus = request.getParameter("focus");
                 boolean valid = true;
                 Student student;
-                HashMap<String, String> errors = new HashMap<String, String>();
+                HashMap<String, String> errors = new HashMap();
                 
                 //validate that a focus was selected
                 if(focus != null && focus.equals("pcWeb")){
