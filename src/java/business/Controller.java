@@ -5,8 +5,10 @@
  */
 package business;
 
+import data.Student;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -41,7 +43,7 @@ public class Controller extends HttpServlet {
         
         switch (action) {
             case "default":
-                url = "/worksheet.jsp";
+                url = "/studentInfo.jsp";
                 break;
             case "initialize_user":
                 String firstName = request.getParameter("first_name");

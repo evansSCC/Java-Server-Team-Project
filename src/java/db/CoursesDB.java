@@ -14,12 +14,12 @@ import java.util.LinkedHashMap;
  */
 public class CoursesDB {
 
-public static ArrayList<Course> getCourseList(String option) throws Exception{
+public static LinkedHashMap getCourseList(String option) throws Exception{
     ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
         ResultSet rs = null;
-        ArrayList<Course> allCourses = new ArrayList();
+        LinkedHashMap allCourses = new LinkedHashMap();
         String query = "SELECT * FROM courses" +
                         "WHERE ? = 'r' OR ? = 'e' ";
         
@@ -31,13 +31,14 @@ public static ArrayList<Course> getCourseList(String option) throws Exception{
             Course course = null;
             if (rs.next()){
                 course = new Course();
+                course.setID(rs.getInt("ID"));
                 course.setCourseID(rs.getString("courseID"));
                 course.setCourseName(rs.getString("courseName"));
                 course.setType(rs.getString("type"));
                 course.setCreditHours(rs.getFloat("creditHours"));
                 course.setIntegrated(rs.getString("integrated"));
                 course.setPcWeb(rs.getString("pcWeb"));
-                allCourses.add(course);
+                allCourses.put(course.getCourseID(), course);
             }
             
            return allCourses;
@@ -100,7 +101,7 @@ public static int addStudentPlan (Student student) throws Exception {
             if(pool != null){pool.freeConnection(connection);}
         }
 }
-
+//change to return generated keys?
 public static int getPlanID(Student student) throws Exception {
     ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
