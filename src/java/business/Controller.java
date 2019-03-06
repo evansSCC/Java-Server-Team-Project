@@ -92,7 +92,7 @@ public class Controller extends HttpServlet {
                         session.setAttribute("student", student);
                         session.setAttribute("name", firstName + " " + lastName);
                         session.setAttribute("studentID", studentID);
-                        if(pcWeb == true){
+                        if (pcWeb == true) {
                             try {
                                 courses = CoursesDB.getCourseList("pcWeb");
                                 request.setAttribute("courses", courses);
@@ -100,9 +100,10 @@ public class Controller extends HttpServlet {
                                 Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         }
-                        if(integrated == true){
+                        if (integrated == true) {
                             try {
                                 courses = CoursesDB.getCourseList("integrated");
+                                request.setAttribute("courses", courses);
                             } catch (Exception ex) {
                                 Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
                             }
