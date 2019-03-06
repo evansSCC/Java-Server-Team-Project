@@ -1,4 +1,3 @@
-
 package db;
 
 import java.sql.*;
@@ -14,22 +13,25 @@ import java.util.LinkedHashMap;
  */
 public class CoursesDB {
 
-public static ArrayList<Course> getCourseList(String option) throws Exception{
-    ConnectionPool pool = ConnectionPool.getInstance();
+    public static ArrayList<Course> getCourseList(String option) throws Exception {
+        ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
         ResultSet rs = null;
         ArrayList<Course> allCourses = new ArrayList();
-        String query = "SELECT * FROM courses" +
-                        "WHERE ? = 'r' OR ? = 'e' ";
-        
+        String query = "";
+        if (option.equals("pcWeb")) {
+            query = "SELECT * FROM courses "
+                    + "WHERE pcWeb = 'R' OR pcWeb = 'E'";
+        } else if (option.equals("integrated")) {
+            query = "SELECT * FROM courses "
+                    + "WHERE integrated = 'R' OR integrated = 'E'";
+        }
         try {
             ps = connection.prepareStatement(query);
-            ps.setString(1, option);
-            ps.setString(2, option);
             rs = ps.executeQuery();
             Course course = null;
-            if (rs.next()){
+            while (rs.next()) {
                 course = new Course();
                 course.setCourseID(rs.getString("courseID"));
                 course.setCourseName(rs.getString("courseName"));
@@ -39,52 +41,55 @@ public static ArrayList<Course> getCourseList(String option) throws Exception{
                 course.setPcWeb(rs.getString("pcWeb"));
                 allCourses.add(course);
             }
-            
-           return allCourses;
-        }
-         catch (Exception e) {
+
+            return allCourses;
+        } catch (Exception e) {
             System.out.println(e);
             throw e;
         } finally {
             DBUtil.closePreparedStatement(ps);
-            if(pool != null){pool.freeConnection(connection);}
+            if (pool != null) {
+                pool.freeConnection(connection);
+            }
         }
     }
 
-public static LinkedHashMap searchPlansByStudentID (Student student) throws Exception {
-    ConnectionPool pool = ConnectionPool.getInstance();
+    public static LinkedHashMap searchPlansByStudentID(Student student) throws Exception {
+        ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
         ResultSet rs = null;
         LinkedHashMap plansList = new LinkedHashMap();
-        String query = "SELECT planID, date FROM studentPlans" +
-                "WHERE studentID = ?;";
-        
+        String query = "SELECT planID, date FROM studentPlans"
+                + "WHERE studentID = ?;";
+
         try {
             ps = connection.prepareStatement(query);
             ps.setInt(1, student.getStudentID());
             rs = ps.executeQuery();
-            if (rs.next()){
+            if (rs.next()) {
                 plansList.put(rs.getString("date"), rs.getInt("planID"));
             }
             return plansList;
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e);
             throw e;
         } finally {
             DBUtil.closePreparedStatement(ps);
-            if(pool != null){pool.freeConnection(connection);}
+            if (pool != null) {
+                pool.freeConnection(connection);
+            }
         }
-}
+    }
 
-public static int addStudentPlan (Student student) throws Exception {
- ConnectionPool pool = ConnectionPool.getInstance();
+    public static int addStudentPlan(Student student) throws Exception {
+        ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
-        
-        String query = "INSERT INTO studentplans (studentID, fName, lName, date)"+
-                "VALUES (?, ?, ?, ?);";
-        
+
+        String query = "INSERT INTO studentplans (studentID, fName, lName, date)"
+                + "VALUES (?, ?, ?, ?);";
+
         try {
             ps = connection.prepareStatement(query);
             ps.setInt(1, student.getStudentID());
@@ -97,18 +102,20 @@ public static int addStudentPlan (Student student) throws Exception {
             throw e;
         } finally {
             DBUtil.closePreparedStatement(ps);
-            if(pool != null){pool.freeConnection(connection);}
+            if (pool != null) {
+                pool.freeConnection(connection);
+            }
         }
-}
+    }
 
-public static int getPlanID(Student student) throws Exception {
-    ConnectionPool pool = ConnectionPool.getInstance();
+    public static int getPlanID(Student student) throws Exception {
+        ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
         ResultSet rs = null;
-        String query = "SELECT LAST_INSERT_ID from StudentPlans" +
-                        "WHERE studentID = ?";
-        
+        String query = "SELECT LAST_INSERT_ID from StudentPlans"
+                + "WHERE studentID = ?";
+
         try {
             ps = connection.prepareStatement(query);
             ps.setInt(1, student.getStudentID());
@@ -119,18 +126,20 @@ public static int getPlanID(Student student) throws Exception {
             throw e;
         } finally {
             DBUtil.closePreparedStatement(ps);
-            if(pool != null){pool.freeConnection(connection);}
+            if (pool != null) {
+                pool.freeConnection(connection);
+            }
         }
-}
+    }
 
-public static int addCourseToPlan(Course course, int PlanID) throws Exception {
-    ConnectionPool pool = ConnectionPool.getInstance();
+    public static int addCourseToPlan(Course course, int PlanID) throws Exception {
+        ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
-        
-        String query = "INSERT INTO planData (ID, PlanID)" +
-                        "VALUES (?, ?);";
-        
+
+        String query = "INSERT INTO planData (ID, PlanID)"
+                + "VALUES (?, ?);";
+
         try {
             ps = connection.prepareStatement(query);
             ps.setInt(1, course.getID());
@@ -141,9 +150,10 @@ public static int addCourseToPlan(Course course, int PlanID) throws Exception {
             throw e;
         } finally {
             DBUtil.closePreparedStatement(ps);
-            if(pool != null){pool.freeConnection(connection);}
+            if (pool != null) {
+                pool.freeConnection(connection);
+            }
         }
-}
-    
-    
+    }
+
 }

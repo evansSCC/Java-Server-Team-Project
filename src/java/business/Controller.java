@@ -5,12 +5,20 @@
  */
 package business;
 
+import data.Course;
+import data.Student;
+import db.CoursesDB;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -30,18 +38,17 @@ public class Controller extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
+        HttpSession session = request.getSession();
         String action = request.getParameter("action");
         String url = "/worksheet.jsp";
-        
-        if(action == null)
-        {
+
+        if (action == null) {
             action = "default";
         }
-        
+
         switch (action) {
             case "default":
-                url = "/worksheet.jsp";
+                url = "/studentInfo.jsp";
                 break;
             case "initialize_user":
                 String firstName = request.getParameter("first_name");
@@ -53,62 +60,83 @@ public class Controller extends HttpServlet {
                 String focus = request.getParameter("focus");
                 boolean valid = true;
                 Student student;
+                ArrayList<Course> courses = new ArrayList<Course>();
                 HashMap<String, String> errors = new HashMap<String, String>();
-                
+
                 //validate that a focus was selected
-                if(focus != null && focus.equals("pcWeb")){
+                if (focus != null && focus.equals("pcWeb")) {
                     pcWeb = true;
-                } else if(focus != null  && focus.equals("integrated")) {
+                } else if (focus != null && focus.equals("integrated")) {
                     integrated = true;
                 } else {
                     valid = false;
                     errors.put("focus", "Please select a focus to continue.");
                 }
                 //validate names
-                if(firstName.equals("") || firstName.isEmpty()){
+                if (firstName.equals("") || firstName.isEmpty()) {
                     valid = false;
                     errors.put("first_name", "Please enter a first name to continue.");
-                }if(lastName.equals("") || lastName.isEmpty()){
+                }
+                if (lastName.equals("") || lastName.isEmpty()) {
                     valid = false;
                     errors.put("last_name", "Please enter a last name to continue.");
                 }
                 //validate studentID
-                if(studentID.equals("") || studentID.isEmpty()){
+                if (studentID.equals("") || studentID.isEmpty()) {
                     valid = false;
                     errors.put("student_id", "Please enter a student ID to continue.");
-                } else if(valid){
-                    try{
+                } else if (valid) {
+                    try {
                         parsedID = Integer.parseInt(studentID);
                         student = new Student(firstName, lastName, parsedID, pcWeb, integrated);
+                        session.setAttribute("student", student);
+                        session.setAttribute("name", firstName + " " + lastName);
+                        session.setAttribute("studentID", studentID);
+                        if(pcWeb == true){
+                            try {
+                                courses = CoursesDB.getCourseList("pcWeb");
+                                request.setAttribute("courses", courses);
+                            } catch (Exception ex) {
+                                Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                        if(integrated == true){
+                            try {
+                                courses = CoursesDB.getCourseList("integrated");
+                            } catch (Exception ex) {
+                                Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
                         url = "/worksheet.jsp";
-                    } catch(NumberFormatException e) {
+                    } catch (NumberFormatException e) {
                         valid = false;
                         errors.put("student_id", "Please enter a valid integer for studentID");
                     }
                 }
-                
-                if(!valid){
+                if (!valid) {
+                    url = "/studentInfo.jsp";
                     request.setAttribute("errors", errors);
                 }
-                
-                
+                break;
+            case "process_user":
+                student = (Student) session.getAttribute("student");
+
         }
-        
+
         this.getServletContext().getRequestDispatcher(url).forward(request, response);
     }
 
-
 // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-/**
- * Handles the HTTP <code>GET</code> method.
- *
- * @param request servlet request
- * @param response servlet response
- * @throws ServletException if a servlet-specific error occurs
- * @throws IOException if an I/O error occurs
- */
-@Override
-        protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
@@ -122,7 +150,7 @@ public class Controller extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-        protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
@@ -133,7 +161,7 @@ public class Controller extends HttpServlet {
      * @return a String containing servlet description
      */
     @Override
-        public String getServletInfo() {
+    public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
 
