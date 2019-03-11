@@ -97,6 +97,7 @@ public class Controller extends HttpServlet {
                             try {
                                 courses = CoursesDB.getCourseList("pcWeb");
                                 request.setAttribute("courses", courses);
+                                session.setAttribute("courses", courses);
                             } catch (Exception ex) {
                                 Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
                             }
@@ -105,6 +106,7 @@ public class Controller extends HttpServlet {
                             try {
                                 courses = CoursesDB.getCourseList("integrated");
                                 request.setAttribute("courses", courses);
+                                session.setAttribute("courses", courses);
                             } catch (Exception ex) {
                                 Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
                             }
@@ -122,8 +124,23 @@ public class Controller extends HttpServlet {
                 break;
             case "process_worksheet":
                 student = (Student) session.getAttribute("student");
+                //LinkedHashMap<String, Course> courses = new LinkedHashMap<String, Course>();
                 String[] values = (String[]) request.getParameterValues("completed");
-
+                LinkedHashMap<String, Course> coursesTaken = new LinkedHashMap<String, Course>();
+                LinkedHashMap<String, Course> allCourses = (LinkedHashMap) session.getAttribute("courses");
+                for(String c : values)
+                {
+                    try
+                    {
+                        coursesTaken.put(c, CoursesDB.getCourseByCourseId(c));
+                    }
+                    catch(Exception e)
+                    {
+                        
+                    }
+                    
+                }
+                session.setAttribute("courses", allCourses);
         }
 
         this.getServletContext().getRequestDispatcher(url).forward(request, response);
