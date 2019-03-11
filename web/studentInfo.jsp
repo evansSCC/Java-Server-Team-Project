@@ -17,9 +17,9 @@
         <h1>Hello World!</h1>
         <form action="Controller" method="POST">
             <input type="hidden" name="action" value="initialize_user">
-            <div class="fieldEntry"><label for="first_name">First Name: </label><input type="text" name="first_name" id="first_name"></div><label class="errorLabel">${errors["first_name"]}</label>
-            <div class="fieldEntry"><label for="last_name">Last Name: </label><input type="text" name="last_name" id="last_name"></div><label class="errorLabel">${errors["last_name"]}</label>
-            <div class="fieldEntry"><label for="student_id">Student ID: </label><input type="text" name="student_id" id="student_id"></div><label class="errorLabel">${errors["student_id"]}</label>
+            <div class="fieldEntry"><label class="fieldLabel" for="first_name">First Name: </label><input type="text" name="first_name" id="first_name"><label class="errorLabel">${errors["first_name"]}</label></div>
+            <div class="fieldEntry"><label class="fieldLabel" for="last_name">Last Name: </label><input type="text" name="last_name" id="last_name"><label class="errorLabel">${errors["last_name"]}</label></div>
+            <div class="fieldEntry"><label class="fieldLabel" for="student_id">Student ID: </label><input type="text" name="student_id" id="student_id"><label class="errorLabel">${errors["student_id"]}</label></div>
             <h3>Focus</h3>
             <label for="pcWeb">PC Web</label><input type="radio" name="focus" value="pcWeb" id="pcWeb"><br>
             <label for="integrated">Integrated</label><input type="radio" name="focus" value="integrated" id="integrated" id="integrated"><br>

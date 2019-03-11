@@ -1,4 +1,3 @@
-
 package db;
 
 import java.sql.*;
@@ -24,11 +23,9 @@ public static LinkedHashMap getCourseList(String option) throws Exception{
         
         try {
             ps = connection.prepareStatement(query);
-            ps.setString(1, option);
-            ps.setString(2, option);
             rs = ps.executeQuery();
             Course course = null;
-            if (rs.next()){
+            while (rs.next()) {
                 course = new Course();
                 course.setCourseID(rs.getString("courseID"));
                 course.setCourseName(rs.getString("courseName"));
@@ -38,20 +35,21 @@ public static LinkedHashMap getCourseList(String option) throws Exception{
                 course.setPcWeb(rs.getString("pcWeb"));
                 allCourses.put(course.getCourseID(), course);
             }
-            
-           return allCourses;
-        }
-         catch (Exception e) {
+
+            return allCourses;
+        } catch (Exception e) {
             System.out.println(e);
             throw e;
         } finally {
             DBUtil.closePreparedStatement(ps);
-            if(pool != null){pool.freeConnection(connection);}
+            if (pool != null) {
+                pool.freeConnection(connection);
+            }
         }
     }
 
-public static LinkedHashMap searchPlansByStudentID (Student student) throws Exception {
-    ConnectionPool pool = ConnectionPool.getInstance();
+    public static LinkedHashMap searchPlansByStudentID(Student student) throws Exception {
+        ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -67,17 +65,19 @@ public static LinkedHashMap searchPlansByStudentID (Student student) throws Exce
                 plansList.put(rs.getString("Plandate"), rs.getInt("planID"));
             }
             return plansList;
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e);
             throw e;
         } finally {
             DBUtil.closePreparedStatement(ps);
-            if(pool != null){pool.freeConnection(connection);}
+            if (pool != null) {
+                pool.freeConnection(connection);
+            }
         }
-}
+    }
 
-public static int addStudentPlan (Student student) throws Exception {
- ConnectionPool pool = ConnectionPool.getInstance();
+    public static int addStudentPlan(Student student) throws Exception {
+        ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
        
@@ -98,12 +98,14 @@ public static int addStudentPlan (Student student) throws Exception {
             throw e;
         } finally {
             DBUtil.closePreparedStatement(ps);
-            if(pool != null){pool.freeConnection(connection);}
+            if (pool != null) {
+                pool.freeConnection(connection);
+            }
         }
-}
+    }
 
-public static int getPlanID(Student student) throws Exception {
-    ConnectionPool pool = ConnectionPool.getInstance();
+    public static int getPlanID(Student student) throws Exception {
+        ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -121,12 +123,14 @@ public static int getPlanID(Student student) throws Exception {
             throw e;
         } finally {
             DBUtil.closePreparedStatement(ps);
-            if(pool != null){pool.freeConnection(connection);}
+            if (pool != null) {
+                pool.freeConnection(connection);
+            }
         }
-}
+    }
 
-public static int addCourseToPlan(Course course, int PlanID) throws Exception {
-    ConnectionPool pool = ConnectionPool.getInstance();
+    public static int addCourseToPlan(Course course, int PlanID) throws Exception {
+        ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
         
@@ -143,7 +147,9 @@ public static int addCourseToPlan(Course course, int PlanID) throws Exception {
             throw e;
         } finally {
             DBUtil.closePreparedStatement(ps);
-            if(pool != null){pool.freeConnection(connection);}
+            if (pool != null) {
+                pool.freeConnection(connection);
+            }
         }
 }
 
