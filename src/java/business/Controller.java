@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -60,7 +61,7 @@ public class Controller extends HttpServlet {
                 String focus = request.getParameter("focus");
                 boolean valid = true;
                 Student student;
-                ArrayList<Course> courses = new ArrayList<Course>();
+                LinkedHashMap<String, Course> courses = new LinkedHashMap<String, Course>();
                 HashMap<String, String> errors = new HashMap<String, String>();
 
                 //validate that a focus was selected
@@ -119,8 +120,9 @@ public class Controller extends HttpServlet {
                     request.setAttribute("errors", errors);
                 }
                 break;
-            case "process_user":
+            case "process_worksheet":
                 student = (Student) session.getAttribute("student");
+                String[] values = (String[]) request.getParameterValues("completed");
 
         }
 

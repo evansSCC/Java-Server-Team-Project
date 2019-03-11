@@ -14,7 +14,7 @@
         <title>Welcome</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <h1>Enter your information below</h1>
         <form action="Controller" method="POST">
             <input type="hidden" name="action" value="initialize_user">
             <div class="fieldEntry"><label class="fieldLabel" for="first_name">First Name: </label><input type="text" name="first_name" id="first_name"><label class="errorLabel">${errors["first_name"]}</label></div>

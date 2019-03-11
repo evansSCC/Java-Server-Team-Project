@@ -13,12 +13,12 @@ import java.util.LinkedHashMap;
  */
 public class CoursesDB {
 
-    public static ArrayList<Course> getCourseList(String option) throws Exception {
+    public static LinkedHashMap<String, Course> getCourseList(String option) throws Exception {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
         ResultSet rs = null;
-        ArrayList<Course> allCourses = new ArrayList();
+        LinkedHashMap<String, Course> allCourses = new LinkedHashMap<String, Course>();
         String query = "";
         if (option.equals("pcWeb")) {
             query = "SELECT * FROM courses "
@@ -39,7 +39,7 @@ public class CoursesDB {
                 course.setCreditHours(rs.getFloat("creditHours"));
                 course.setIntegrated(rs.getString("integrated"));
                 course.setPcWeb(rs.getString("pcWeb"));
-                allCourses.add(course);
+                allCourses.put(rs.getString("courseID"), course);
             }
 
             return allCourses;
