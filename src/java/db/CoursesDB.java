@@ -29,6 +29,7 @@ public static LinkedHashMap getCourseList(String option) throws Exception{
             Course course = null;
             while (rs.next()) {
                 course = new Course();
+                course.setID(rs.getInt("ID"));
                 course.setCourseID(rs.getString("courseID"));
                 course.setCourseName(rs.getString("courseName"));
                 course.setType(rs.getString("type"));
