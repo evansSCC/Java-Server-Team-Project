@@ -18,7 +18,7 @@ public class Course {
     int ID = 0;
     double creditHours = 0;
 
-    public Course(){};
+    public Course(){}
     
     public Course(String courseID, String courseName, String pcWeb, String integrated, String type, int ID, double creditHours) {
         this.courseID = courseID;

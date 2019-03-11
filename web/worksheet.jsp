@@ -15,7 +15,7 @@
                     <th>Course ID</th>
                     <th>Course Name</th>
                     <th>Credit Hours</th>
-                    <th>pcWeb</th>
+                    <th>PC and Web</th>
                     <th>Integrated</th>
                     <th>Type</th>
                     <th>Completed</th>
@@ -23,13 +23,13 @@
                 <!-- This will output the classes with a foreach loop -->
                 <c:forEach var="course" items="${courses}">
                     <tr>
-                        <td>${course.courseID}</td>
-                        <td>${course.courseName}</td>
-                        <td>${course.creditHours}</td>
-                        <td>${course.pcWeb}</td>
-                        <td>${course.integrated}</td>
-                        <td>${course.type}</td>
-                        <td><input type="checkbox" name="completed" value="${course.courseID}"></td>
+                        <td>${course.value.courseID}</td>
+                        <td>${course.value.courseName}</td>
+                        <td>${course.value.creditHours}</td>
+                        <td>${course.value.pcWeb}</td>
+                        <td>${course.value.integrated}</td>
+                        <td>${course.value.type}</td>
+                        <td><input type="checkbox" name="completed" value="${course.value.courseID}"></td>
                     </tr>
                 </c:forEach>
             </table>

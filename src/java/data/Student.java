@@ -2,10 +2,10 @@ package data;
 
 
 import data.Course;
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 public class Student {
-    private ArrayList<Course> courses =  new ArrayList<Course>();
+    private LinkedHashMap<String, Course> courses =  new LinkedHashMap<String, Course>();
     //this will link to the pcWeb and integrated field. if true get courses for focus.
     private boolean pcWeb = false, integrated = false;
     private String firstName, lastName;
@@ -21,11 +21,11 @@ public class Student {
         this.integrated = integrated;
     }
 
-    public ArrayList<Course> getCourses() {
+    public LinkedHashMap<String, Course> getCourses() {
         return courses;
     }
 
-    public void setCourses(ArrayList<Course> courses) {
+    public void setCourses(LinkedHashMap<String, Course> courses) {
         this.courses = courses;
     }
 

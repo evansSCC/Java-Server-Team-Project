@@ -120,8 +120,9 @@ public class Controller extends HttpServlet {
                     request.setAttribute("errors", errors);
                 }
                 break;
-            case "process_user":
+            case "process_worksheet":
                 student = (Student) session.getAttribute("student");
+                String[] values = (String[]) request.getParameterValues("completed");
 
         }
 
