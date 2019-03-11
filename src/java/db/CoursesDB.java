@@ -85,7 +85,7 @@ public static LinkedHashMap getCourseList(String option) throws Exception{
         ResultSet rs = null;
         PreparedStatement psinsert = null;
         PreparedStatement psquery = null;
-        int planID;
+        int planID = 10;
        
         String insert = "INSERT INTO studentplans (studentID, fName, lName, PlanDate) " +
                 "VALUES (?, ?, ?, NOW());";
@@ -100,7 +100,9 @@ public static LinkedHashMap getCourseList(String option) throws Exception{
             psinsert.executeUpdate();
             psquery = connection.prepareStatement(query);
             rs = psquery.executeQuery();
-            planID = rs.getInt(0);
+            if(rs.next()){
+                planID = rs.getInt("LAST_INSERT_ID()");
+            }
             return planID;
         } catch (Exception e) {
             System.out.println(e);
@@ -108,31 +110,6 @@ public static LinkedHashMap getCourseList(String option) throws Exception{
         } finally {
             DBUtil.closePreparedStatement(psinsert);
             DBUtil.closePreparedStatement(psquery);
-            if (pool != null) {
-                pool.freeConnection(connection);
-            }
-        }
-    }
-
-    public static int getPlanID(Student student) throws Exception {
-        ConnectionPool pool = ConnectionPool.getInstance();
-        Connection connection = pool.getConnection();
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        String query = "SELECT LAST_INSERT_ID() from StudentPlans " +
-                        "WHERE studentID = ?; ";
-        
-        try {
-            ps = connection.prepareStatement(query);
-            ps.setInt(1, student.getStudentID());
-            rs = ps.executeQuery();
-            int planID = rs.getInt(1);
-            return planID;
-        } catch (Exception e) {
-            System.out.println(e);
-            throw e;
-        } finally {
-            DBUtil.closePreparedStatement(ps);
             if (pool != null) {
                 pool.freeConnection(connection);
             }

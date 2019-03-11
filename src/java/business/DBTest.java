@@ -47,8 +47,9 @@ public class DBTest extends HttpServlet {
             message += "GetAll Error <br>";
         }
             try {
-               CoursesDB.addStudentPlan(test);
-               message +="addStudentPlan success <br>";
+              id = CoursesDB.addStudentPlan(test);
+               
+               message +="addStudentPlan success. Last ID: " + id + " <br>";
             } catch (Exception e){
                 message += "addStudentPlan error <br>";
             }
@@ -59,13 +60,7 @@ public class DBTest extends HttpServlet {
             } catch (Exception e) {
                 message += "searchByID error <br>";
             }
-            
-//            try {
-//                id = CoursesDB.getPlanID(test);
-//                message += "getPlanID success " + id + "<br>" ;
-//            } catch (Exception e) {
-//                message += "getPlanId error <br>";
-//            }
+                  
             
             try { 
                 CoursesDB.addCourseToPlan(course, id);
