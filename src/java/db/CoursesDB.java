@@ -28,8 +28,6 @@ public class CoursesDB {
         }
         try {
             ps = connection.prepareStatement(query);
-            ps.setString(1, option);
-            ps.setString(2, option);
             rs = ps.executeQuery();
             Course course = null;
             while (rs.next()) {
