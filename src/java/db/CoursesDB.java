@@ -79,25 +79,32 @@ public static LinkedHashMap getCourseList(String option) throws Exception{
     public static int addStudentPlan(Student student) throws Exception {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
-        PreparedStatement ps = null;
+        ResultSet rs = null;
+        PreparedStatement psinsert = null;
+        PreparedStatement psquery = null;
+        int planID;
        
-        String query = "INSERT INTO studentplans (studentID, fName, lName, PlanDate) " +
-                "VALUES (?, ?, ?, NOW());" +
+        String insert = "INSERT INTO studentplans (studentID, fName, lName, PlanDate) " +
+                "VALUES (?, ?, ?, NOW());";
                 
-                "SELECT LAST_INSERT_ID() from StudentPlans " +
-                        "WHERE studentID = ?; ";
+        String query = "SELECT LAST_INSERT_ID() from StudentPlans;";
         
         try {
-            ps = connection.prepareStatement(query);
-            ps.setInt(1, student.getStudentID());
-            ps.setString(2, student.getFirstName());
-            ps.setString(3, student.getLastName());
-            return ps.executeUpdate();
+            psinsert = connection.prepareStatement(insert);
+            psinsert.setInt(1, student.getStudentID());
+            psinsert.setString(2, student.getFirstName());
+            psinsert.setString(3, student.getLastName());
+            psinsert.executeUpdate();
+            psquery = connection.prepareStatement(query);
+            rs = psquery.executeQuery();
+            planID = rs.getInt(0);
+            return planID;
         } catch (Exception e) {
             System.out.println(e);
             throw e;
         } finally {
-            DBUtil.closePreparedStatement(ps);
+            DBUtil.closePreparedStatement(psinsert);
+            DBUtil.closePreparedStatement(psquery);
             if (pool != null) {
                 pool.freeConnection(connection);
             }
