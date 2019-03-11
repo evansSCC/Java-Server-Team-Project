@@ -186,3 +186,16 @@ public class Controller extends HttpServlet {
     }// </editor-fold>
 
 }
+
+//Admin Database sort/comment methods - insert where appropriate
+
+//List of plans
+//String sortOption = request.getParameter("sortOption");
+//String sortOrder = request.getParameter("sortOrder");
+//LinkedHashMap<String, Plan> plansList = getPlanList(sortOption, sortOrder);
+//request.setAttribute("planList", plansList);
+
+//Get Comments By Plan ID
+//int planID = request.getParameter("planID");
+//LinkedHashMap<String, String> comments = getPlanComments(planID);
+//request.setAttribute("comments", comments);
