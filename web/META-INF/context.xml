@@ -1,2 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context path="/2514group19wn-java-server-team-n"/>
+<Context path="/QuartersToSemestersSCC">
+    <Resource name="jdbc/quartertosemesters" auth="Container"
+              driverClassName="com.mysql.jdbc.Driver"
+              url="jdbc:mysql://localhost:3306/quartertosemesters"
+              username="root" password="" maxActive="100" maxIdle="30"
+              maxWait="10000" logAbandoned="true" removeAbandoned="true"
+              removeAbandonedTimeout="60" type="javax.sql.DataSource" />
+</Context>
