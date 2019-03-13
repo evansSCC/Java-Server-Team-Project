@@ -124,21 +124,69 @@ public class Controller extends HttpServlet {
                 break;
             case "process_worksheet":
                 student = (Student) session.getAttribute("student");
-                //LinkedHashMap<String, Course> courses = new LinkedHashMap<String, Course>();
+                LinkedHashMap<String, Course> coursesNeeded = new LinkedHashMap<String, Course>();
                 String[] values = (String[]) request.getParameterValues("completed");
-                LinkedHashMap<String, Course> coursesTaken = new LinkedHashMap<String, Course>();
+                //LinkedHashMap<String, Course> coursesTaken = new LinkedHashMap<String, Course>();
                 LinkedHashMap<String, Course> allCourses = (LinkedHashMap) session.getAttribute("courses");
+                
+                //creates list of courses not taken
                 for(String c : values)
+                {
+                    if(allCourses.containsKey(c))
+                    {
+                        allCourses.remove(c);
+                    }
+                    
+                }
+                
+                
+                //semester
+                if(!allCourses.containsKey("INFO1121") || !allCourses.containsKey("INFO1131") || !allCourses.containsKey("INFO1211"))
                 {
                     try
                     {
-                        coursesTaken.put(c, CoursesDB.getCourseByCourseId(c));
+                        coursesNeeded.put("BSADIOIO", CoursesDB.getCourseByCourseId("BSADIOIO"));
                     }
                     catch(Exception e)
                     {
-                        
+                            
                     }
-                    
+                }
+                
+                if(!allCourses.containsKey("INFO2544") || !allCourses.containsKey("INFO2644"))
+                {
+                    try
+                    {
+                        coursesNeeded.put("INFO2644", CoursesDB.getCourseByCourseId("INFO2644"));
+                    }
+                    catch(Exception e)
+                    {
+                            
+                    }
+                }
+                
+                if(!allCourses.containsKey("INFO2558") || !allCourses.containsKey("INFO2638"))
+                {
+                    try
+                    {
+                        coursesNeeded.put("INFO2638", CoursesDB.getCourseByCourseId("INFO2638"));
+                    }
+                    catch(Exception e)
+                    {
+                            
+                    }
+                }
+                
+                if(!allCourses.containsKey("INFO2544") || !allCourses.containsKey("INFO2644"))
+                {
+                    try
+                    {
+                        coursesNeeded.put("INFO2644", CoursesDB.getCourseByCourseId("INFO2644"));
+                    }
+                    catch(Exception e)
+                    {
+                            
+                    }
                 }
                 session.setAttribute("courses", allCourses);
         }
