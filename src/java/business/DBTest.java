@@ -38,7 +38,7 @@ public class DBTest extends HttpServlet {
             String url="/test.jsp";
             int id = 0;
             Student test = new Student("John", "Doe", 123456, true, false);
-            Course course = new Course("INFO1131", "Microsoft Excel", "R", "R", "Q", 2, 1.5);
+            Course course = new Course("INFO1131", "Microsoft Excel", "R", "R", "Q", 2, 1.5, "INFO1131");
             
             try{
                 LinkedHashMap getAll = CoursesDB.getCourseList("pcWeb");

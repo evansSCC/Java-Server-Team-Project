@@ -43,10 +43,56 @@ public class CoursesDB {
                 course.setCreditHours(rs.getFloat("creditHours"));
                 course.setIntegrated(rs.getString("integrated"));
                 course.setPcWeb(rs.getString("pcWeb"));
+                course.setEquivalent(rs.getString("equivalent"));
                 allCourses.put(rs.getString("courseID"), course);
             }
 
             return allCourses;
+        } catch (Exception e) {
+            System.out.println(e);
+            throw e;
+        } finally {
+            DBUtil.closePreparedStatement(ps);
+            if (pool != null) {
+                pool.freeConnection(connection);
+            }
+        }
+    }
+    
+    public static LinkedHashMap<String, Course> getSemesterCourses(String option) throws Exception {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        LinkedHashMap<String, Course> semCourses = new LinkedHashMap<String, Course>();
+        String query = "";
+        if (option.equals("pcWeb")) {
+            query = "SELECT * FROM courses "
+                    + "WHERE (pcWeb = 'R' OR pcWeb = 'E') " 
+                    + "AND type = 'S';";
+        } else if (option.equals("integrated")) {
+            query = "SELECT * FROM courses "
+                    + "WHERE (integrated = 'R' OR integrated = 'E') "
+                    + "AND type = 'S';";
+        }
+        try {
+            ps = connection.prepareStatement(query);
+            rs = ps.executeQuery();
+            Course course = null;
+            while (rs.next()) {
+                course = new Course();
+                course.setID(rs.getInt("ID"));
+                course.setCourseID(rs.getString("courseID"));
+                course.setCourseName(rs.getString("courseName"));
+                course.setType(rs.getString("type"));
+                course.setCreditHours(rs.getFloat("creditHours"));
+                course.setIntegrated(rs.getString("integrated"));
+                course.setPcWeb(rs.getString("pcWeb"));
+                course.setEquivalent(rs.getString("equivalent"));
+                semCourses.put(rs.getString("courseID"), course);
+            }
+
+            return semCourses;
         } catch (Exception e) {
             System.out.println(e);
             throw e;

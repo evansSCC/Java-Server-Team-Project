@@ -17,10 +17,11 @@ public class Course {
     private String type = "";
     int ID = 0;
     double creditHours = 0;
+    private String equivalent = "";
 
     public Course(){}
     
-    public Course(String courseID, String courseName, String pcWeb, String integrated, String type, int ID, double creditHours) {
+    public Course(String courseID, String courseName, String pcWeb, String integrated, String type, int ID, double creditHours, String equivalent) {
         this.courseID = courseID;
         this.courseName = courseName;
         this.pcWeb = pcWeb;
@@ -85,6 +86,14 @@ public class Course {
 
     public void setCreditHours(float creditHours) {
         this.creditHours = creditHours;
+    }
+
+    public String getEquivalent() {
+        return equivalent;
+    }
+
+    public void setEquivalent(String equivalent) {
+        this.equivalent = equivalent;
     }
     
     

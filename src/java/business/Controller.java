@@ -124,6 +124,8 @@ public class Controller extends HttpServlet {
                 break;
             case "process_worksheet":
                 student = (Student) session.getAttribute("student");
+                
+                LinkedHashMap<String, Course> semesterEquiv = new LinkedHashMap();
                 LinkedHashMap<String, Course> coursesNeeded = new LinkedHashMap<String, Course>();
                 String[] values = (String[]) request.getParameterValues("completed");
                 //LinkedHashMap<String, Course> coursesTaken = new LinkedHashMap<String, Course>();
@@ -188,6 +190,22 @@ public class Controller extends HttpServlet {
                             
                     }
                 }
+                
+               try {
+                  
+                   LinkedHashMap<String, Course> semesterCourses = CoursesDB.getSemesterCourses("pcWeb");
+                 
+                   for (String key : allCourses.keySet()){
+                       Course cur = allCourses.get(key);
+                       String q = cur.getEquivalent();
+                       semesterEquiv.put(q, semesterCourses.get(q));
+                   }
+                   
+                   
+               } catch (Exception e){
+                   
+               }
+                session.setAttribute("semester", semesterEquiv);
                 session.setAttribute("courses", allCourses);
         }
 
