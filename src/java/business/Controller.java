@@ -97,6 +97,7 @@ public class Controller extends HttpServlet {
                             try {
                                 courses = CoursesDB.getCourseList("pcWeb");
                                 request.setAttribute("courses", courses);
+                                session.setAttribute("courses", courses);
                             } catch (Exception ex) {
                                 Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
                             }
@@ -105,6 +106,7 @@ public class Controller extends HttpServlet {
                             try {
                                 courses = CoursesDB.getCourseList("integrated");
                                 request.setAttribute("courses", courses);
+                                session.setAttribute("courses", courses);
                             } catch (Exception ex) {
                                 Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
                             }
@@ -122,8 +124,6 @@ public class Controller extends HttpServlet {
                 break;
             case "process_worksheet":
                 student = (Student) session.getAttribute("student");
-                String[] values = (String[]) request.getParameterValues("completed");
-
         }
 
         this.getServletContext().getRequestDispatcher(url).forward(request, response);

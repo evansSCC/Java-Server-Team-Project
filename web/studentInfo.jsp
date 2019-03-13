@@ -24,7 +24,9 @@
             <label for="pcWeb">PC Web</label><input type="radio" name="focus" value="pcWeb" id="pcWeb"><br>
             <label for="integrated">Integrated</label><input type="radio" name="focus" value="integrated" id="integrated" id="integrated"><br>
             <label class="errorLabel">${errors["focus"]}</label>
-            <br><br><input type="submit" value="Submit">
+            <br><br><input type="submit" value="Submit"><br><br>
+            
+            <a href="admin.jsp">Admin Login</a>
         </form>
     </body>
 </html>
