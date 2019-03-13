@@ -263,5 +263,36 @@ public static LinkedHashMap<String, String> getPlanComments (int planID) throws 
 }
 
     
-    
+    public static Course getCourseByCourseId (String courseID) throws Exception {
+    ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Course course = new Course();
+        
+        String query = "SELECT * FROM courses WHERE courseID = ?;";
+        
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setString(1, courseID);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                course.setCourseID(courseID);
+                course.setCourseName(rs.getString("courseName"));
+                course.setCreditHours(rs.getFloat("creditHours"));
+                course.setType(rs.getString("type"));
+                course.setID(rs.getInt("ID"));
+                course.setIntegrated(rs.getString("integrated"));
+                course.setPcWeb(rs.getString("pcWeb"));  
+            }
+            return course;
+        }
+        catch (Exception e) {
+            System.out.println(e);
+            throw e;
+        } finally {
+            DBUtil.closePreparedStatement(ps);
+            if(pool != null){pool.freeConnection(connection);}
+        }
+    }
 }
