@@ -124,22 +124,48 @@ public class Controller extends HttpServlet {
                 break;
             case "process_worksheet":
                 student = (Student) session.getAttribute("student");
-                //LinkedHashMap<String, Course> courses = new LinkedHashMap<String, Course>();
+                LinkedHashMap<String, Course> coursesNeeded = new LinkedHashMap<String, Course>();
                 String[] values = (String[]) request.getParameterValues("completed");
-                LinkedHashMap<String, Course> coursesTaken = new LinkedHashMap<String, Course>();
+                //LinkedHashMap<String, Course> coursesTaken = new LinkedHashMap<String, Course>();
                 LinkedHashMap<String, Course> allCourses = (LinkedHashMap) session.getAttribute("courses");
+                
+                //creates list of courses not taken
                 for(String c : values)
                 {
-                    try
+                    if(allCourses.containsKey(c))
                     {
-                        coursesTaken.put(c, CoursesDB.getCourseByCourseId(c));
-                    }
-                    catch(Exception e)
-                    {
-                        
+                        allCourses.remove(c);
                     }
                     
                 }
+                
+                //semester
+                
+                if(!allCourses.containsKey("INFO1121") || !allCourses.containsKey("INFO1131") || !allCourses.containsKey("INFO1211"))
+                {
+                    try
+                    {
+                        coursesNeeded.put("BSADIOIO", CoursesDB.getCourseByCourseId("BSADIOIO"));
+                    }
+                    catch(Exception e)
+                    {
+                            
+                    }
+                }
+                
+                
+                
+//                for(String c : values)
+//                {
+//                    try
+//                    {
+//                        coursesTaken.put(c, CoursesDB.getCourseByCourseId(c));
+//                    }
+//                    catch(Exception e)
+//                    {
+//                        
+//                    }
+//                }
                 session.setAttribute("courses", allCourses);
         }
 
