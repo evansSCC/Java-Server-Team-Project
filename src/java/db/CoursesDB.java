@@ -132,16 +132,16 @@ public class CoursesDB {
         }
     }
 
-    public static int addStudentPlan(Student student) throws Exception {
+    public static int addStudentPlan(Student student, String option) throws Exception {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         ResultSet rs = null;
         PreparedStatement psinsert = null;
         PreparedStatement psquery = null;
-        int planID = 10;
+        int planID = 0;
        
-        String insert = "INSERT INTO studentplans (studentID, fName, lName, PlanDate) " +
-                "VALUES (?, ?, ?, NOW());";
+        String insert = "INSERT INTO studentplans (studentID, fName, lName, PlanDate, focus) " +
+                "VALUES (?, ?, ?, NOW(), ?);";
                 
         String query = "SELECT LAST_INSERT_ID() from StudentPlans;";
         
@@ -150,6 +150,7 @@ public class CoursesDB {
             psinsert.setInt(1, student.getStudentID());
             psinsert.setString(2, student.getFirstName());
             psinsert.setString(3, student.getLastName());
+            psinsert.setString(4, option);
             psinsert.executeUpdate();
             psquery = connection.prepareStatement(query);
             rs = psquery.executeQuery();
@@ -230,41 +231,34 @@ public static Course getCourseById (int ID) throws Exception {
 
 //Get Sorted List of Plans
 
-public static LinkedHashMap<String, Plan> getPlanList (String sortOption, String sortOrder) throws Exception {
+public static LinkedHashMap<String, Plan> getPlanList (String sortOption) throws Exception {
     ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
         ResultSet rs = null;
         LinkedHashMap<String, Plan> plansList = new LinkedHashMap();
        
-        String query = "SELECT * FROM studentplans ORDER BY ? ?;";
+        String query = "SELECT * FROM studentplans;";
         
         try {
             Student s = new Student();
             Plan p = new Plan();
             ps = connection.prepareStatement(query);
-            ps.setString(1, sortOption);
-            ps.setString(2, sortOrder);
             rs = ps.executeQuery();
             if (rs.next()){
-                String planDate = rs.getDate("planDate").toString();
+                String planDate = rs.getString("planDate");
                 s.setFirstName(rs.getString("fName"));
                 s.setLastName(rs.getString("lName"));
                 s.setStudentID(rs.getInt("StudentID"));
                 if(rs.getString("focus").equals("pcweb")){
                     s.setPcWeb(true);
-                }
-                else if(rs.getString("focus").equals("integrated")){
+                    }
+                    else if(rs.getString("focus").equals("integrated")){
                     s.setIntegrated(true);
-                }
-//                else if(rs.getString("focus").equals("networking")){
-//                    s.setNetworking(true);
-//                }
-//                else if(rs.getString("focus").equals("support")){
-//                    s.setSupport(true);
-//                }
+                    }
                 p.setPlanID(rs.getInt("planID"));
                 p.setStudent(s);
+                
                 plansList.put(planDate, p);
             }
             return plansList;

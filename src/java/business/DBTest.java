@@ -47,7 +47,7 @@ public class DBTest extends HttpServlet {
             message += "GetAll Error <br>";
         }
             try {
-              id = CoursesDB.addStudentPlan(test);
+              id = CoursesDB.addStudentPlan(test, "pcWeb");
                
                message +="addStudentPlan success. Last ID: " + id + " <br>";
             } catch (Exception e){

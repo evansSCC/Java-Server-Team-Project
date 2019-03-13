@@ -6,6 +6,7 @@
 package business;
 
 import data.Course;
+import data.Plan;
 import data.Student;
 import db.CoursesDB;
 import java.io.IOException;
@@ -124,8 +125,13 @@ public class Controller extends HttpServlet {
                 break;
             case "process_worksheet":
                 student = (Student) session.getAttribute("student");
-                
-                LinkedHashMap<String, Course> semesterEquiv = new LinkedHashMap();
+                String option = "";
+                if (student.isIntegrated()){
+                    option = "integrated";
+                }
+                else if (student.isPcWeb()){
+                    option = "pcWeb";
+                }
                 LinkedHashMap<String, Course> coursesNeeded = new LinkedHashMap<String, Course>();
                 LinkedHashMap<String, Course> coursesTaken = new LinkedHashMap<String, Course>();
                 String[] values = (String[]) request.getParameterValues("completed");
@@ -133,16 +139,14 @@ public class Controller extends HttpServlet {
                 LinkedHashMap<String, Course> allCourses = (LinkedHashMap) session.getAttribute("courses");
 
                 //creates list of courses not taken
-                if (values.length > 0) {
-                    for (String c : values) {
-                        if (allCourses.containsKey(c)) {
-                            allCourses.remove(c);
-                            try {
-                                coursesTaken.put(c, CoursesDB.getCourseByCourseId(c));
-                            } catch (Exception e) {
+                for (String c : values) {
+                    if (allCourses.containsKey(c)) {
+                        allCourses.remove(c);
+                    }
+                    try {
+                        coursesTaken.put(c, CoursesDB.getCourseByCourseId(c));
+                    } catch (Exception e) {
 
-                            }
-                        }
                     }
                 }
 
@@ -176,7 +180,7 @@ public class Controller extends HttpServlet {
                     }
                 }
 
-                if (!coursesTaken.containsKey("INFO2544") || !coursesTaken.containsKey("INFO2644")) {
+                if (option.equals("pcWeb") && (!coursesTaken.containsKey("INFO2544") || !coursesTaken.containsKey("INFO2644"))) {
                     try {
                         coursesNeeded.put("INFO2644", CoursesDB.getCourseByCourseId("INFO2644"));
                     } catch (Exception e) {
@@ -184,43 +188,59 @@ public class Controller extends HttpServlet {
                     }
                 }
 
-                if (!coursesTaken.containsKey("INFO2558") || !coursesTaken.containsKey("INFO2638")) {
+                if (option.equals("integrated") && (!coursesTaken.containsKey("INFO2558") || !coursesTaken.containsKey("INFO2638"))) {
                     try {
                         coursesNeeded.put("INFO2638", CoursesDB.getCourseByCourseId("INFO2638"));
                     } catch (Exception e) {
 
                     }
                 }
-
-                if (!coursesTaken.containsKey("INFO2544") || !coursesTaken.containsKey("INFO2644")) {
-                    try {
-                        coursesNeeded.put("INFO2644", CoursesDB.getCourseByCourseId("INFO2644"));
-                    } catch (Exception e) {
-
-                    }
-                }
+              
                 
                try {
-                  
-                   LinkedHashMap<String, Course> semesterCourses = CoursesDB.getSemesterCourses("pcWeb");
+                   LinkedHashMap<String, Course> semesterCourses = CoursesDB.getSemesterCourses(option);
                  
                    for (String key : allCourses.keySet()){
                        Course cur = allCourses.get(key);
                        String q = cur.getEquivalent();
-                       semesterEquiv.put(q, semesterCourses.get(q));
-                   }
-                   
-                   
+                       if( q != null && !q.equals("")){    
+                       coursesNeeded.put(q, semesterCourses.get(q)); 
+                       }
+                   }   
                } catch (Exception e){
-                   
+   
                }
+               
+               int planID = 0;
+               
+                try {
+                    planID = CoursesDB.addStudentPlan(student, option);
+                } catch (Exception e) {
+                    
+                }
+                for (String key : allCourses.keySet()){
+                    Course cur = allCourses.get(key);
+                    try {
+                        CoursesDB.addCourseToPlan(cur, planID);
+                    } catch (Exception e){
+                        
+                    }
+                }
+                
                 url = "/output.jsp";
 
-                if (values.length > 0) {
-                    session.setAttribute("coursesQuarter", allCourses);
-                    session.setAttribute("coursesSemester", semesterEquiv);
-                    session.setAttribute("coursesCompleted", coursesTaken);
+                session.setAttribute("coursesQuarter", allCourses);
+                session.setAttribute("coursesSemester", coursesNeeded);
+                session.setAttribute("coursesCompleted", coursesTaken);
+                break;
+                
+            case "admin_login":
+                LinkedHashMap<String, Plan> plansList = new LinkedHashMap();
+                try { plansList = CoursesDB.getPlanList("planDate"); }
+                catch (Exception e) {
                 }
+                url = "/allplans.jsp";
+                session.setAttribute("plansList", plansList);
         }
 
         this.getServletContext().getRequestDispatcher(url).forward(request, response);
