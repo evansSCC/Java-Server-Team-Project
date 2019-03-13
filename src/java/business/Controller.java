@@ -124,6 +124,23 @@ public class Controller extends HttpServlet {
                 break;
             case "process_worksheet":
                 student = (Student) session.getAttribute("student");
+                //LinkedHashMap<String, Course> courses = new LinkedHashMap<String, Course>();
+                String[] values = (String[]) request.getParameterValues("completed");
+                LinkedHashMap<String, Course> coursesTaken = new LinkedHashMap<String, Course>();
+                LinkedHashMap<String, Course> allCourses = (LinkedHashMap) session.getAttribute("courses");
+                for(String c : values)
+                {
+                    try
+                    {
+                        coursesTaken.put(c, CoursesDB.getCourseByCourseId(c));
+                    }
+                    catch(Exception e)
+                    {
+                        
+                    }
+                    
+                }
+                session.setAttribute("courses", allCourses);
         }
 
         this.getServletContext().getRequestDispatcher(url).forward(request, response);
@@ -169,3 +186,16 @@ public class Controller extends HttpServlet {
     }// </editor-fold>
 
 }
+
+//Admin Database sort/comment methods - insert where appropriate
+
+//List of plans
+//String sortOption = request.getParameter("sortOption");
+//String sortOrder = request.getParameter("sortOrder");
+//LinkedHashMap<String, Plan> plansList = getPlanList(sortOption, sortOrder);
+//request.setAttribute("planList", plansList);
+
+//Get Comments By Plan ID
+//int planID = request.getParameter("planID");
+//LinkedHashMap<String, String> comments = getPlanComments(planID);
+//request.setAttribute("comments", comments);

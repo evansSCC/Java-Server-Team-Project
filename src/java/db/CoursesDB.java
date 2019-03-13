@@ -2,8 +2,10 @@ package db;
 
 import java.sql.*;
 import data.Course;
+import data.Plan;
 import data.Student;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 /**
@@ -175,6 +177,122 @@ public static Course getCourseById (int ID) throws Exception {
             if(pool != null){pool.freeConnection(connection);}
         }
     }
+
+//Database Admin Methods
+
+//Get Sorted List of Plans
+
+public static LinkedHashMap<String, Plan> getPlanList (String sortOption, String sortOrder) throws Exception {
+    ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        LinkedHashMap<String, Plan> plansList = new LinkedHashMap();
+       
+        String query = "SELECT * FROM studentplans ORDER BY ? ?;";
+        
+        try {
+            Student s = new Student();
+            Plan p = new Plan();
+            ps = connection.prepareStatement(query);
+            ps.setString(1, sortOption);
+            ps.setString(2, sortOrder);
+            rs = ps.executeQuery();
+            if (rs.next()){
+                String planDate = rs.getDate("planDate").toString();
+                s.setFirstName(rs.getString("fName"));
+                s.setLastName(rs.getString("lName"));
+                s.setStudentID(rs.getInt("StudentID"));
+                if(rs.getString("focus").equals("pcweb")){
+                    s.setPcWeb(true);
+                }
+                else if(rs.getString("focus").equals("integrated")){
+                    s.setIntegrated(true);
+                }
+//                else if(rs.getString("focus").equals("networking")){
+//                    s.setNetworking(true);
+//                }
+//                else if(rs.getString("focus").equals("support")){
+//                    s.setSupport(true);
+//                }
+                p.setPlanID(rs.getInt("planID"));
+                p.setStudent(s);
+                plansList.put(planDate, p);
+            }
+            return plansList;
+        }catch (Exception e) {
+            System.out.println(e);
+            throw e;
+        } finally {
+            DBUtil.closePreparedStatement(ps);
+            if(pool != null){pool.freeConnection(connection);}
+        }
+        
+}
+
+//See All Comments By Plan
+public static LinkedHashMap<String, String> getPlanComments (int planID) throws Exception {
+    ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        LinkedHashMap<String, String> comments = new LinkedHashMap();
+       
+        String query = "SELECT users.fName, users.lName, plancomments.Comment " +
+                "FROM users "
+                + "JOIN planComments ON users.adminID=planComments.adminID WHERE planComments.planID = ?";
+        
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, planID);
+            rs = ps.executeQuery();
+            if (rs.next()){
+                String comment = rs.getString("comment");
+                String adminName = rs.getString("fName") + " " + rs.getString("lName");
+                comments.put(adminName, comment);
+            }
+             return comments;   
+        }catch (Exception e) {
+            System.out.println(e);
+            throw e;
+        } finally {
+            DBUtil.closePreparedStatement(ps);
+            if(pool != null){pool.freeConnection(connection);}
+        }
+        
+}
+
     
-    
+    public static Course getCourseByCourseId (String courseID) throws Exception {
+    ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Course course = new Course();
+        
+        String query = "SELECT * FROM courses WHERE courseID = ?;";
+        
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setString(1, courseID);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                course.setCourseID(courseID);
+                course.setCourseName(rs.getString("courseName"));
+                course.setCreditHours(rs.getFloat("creditHours"));
+                course.setType(rs.getString("type"));
+                course.setID(rs.getInt("ID"));
+                course.setIntegrated(rs.getString("integrated"));
+                course.setPcWeb(rs.getString("pcWeb"));  
+            }
+            return course;
+        }
+        catch (Exception e) {
+            System.out.println(e);
+            throw e;
+        } finally {
+            DBUtil.closePreparedStatement(ps);
+            if(pool != null){pool.freeConnection(connection);}
+        }
+    }
 }
