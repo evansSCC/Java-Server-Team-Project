@@ -153,7 +153,7 @@ public class Controller extends HttpServlet {
                     }
                 }
                 
-                
+                //if(!allCourses.containsKey("INFO1121"))
                 
 //                for(String c : values)
 //                {
