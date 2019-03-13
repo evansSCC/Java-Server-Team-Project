@@ -131,16 +131,14 @@ public class Controller extends HttpServlet {
                 LinkedHashMap<String, Course> allCourses = (LinkedHashMap) session.getAttribute("courses");
 
                 //creates list of courses not taken
-                if (values.length > 0) {
-                    for (String c : values) {
-                        if (allCourses.containsKey(c)) {
-                            allCourses.remove(c);
-                            try {
-                                coursesTaken.put(c, CoursesDB.getCourseByCourseId(c));
-                            } catch (Exception e) {
+                for (String c : values) {
+                    if (allCourses.containsKey(c)) {
+                        allCourses.remove(c);
+                    }
+                    try {
+                        coursesTaken.put(c, CoursesDB.getCourseByCourseId(c));
+                    } catch (Exception e) {
 
-                            }
-                        }
                     }
                 }
 
@@ -199,11 +197,9 @@ public class Controller extends HttpServlet {
                 }
                 url = "/output.jsp";
 
-                if (values.length > 0) {
-                    session.setAttribute("coursesQuarter", allCourses);
-                    session.setAttribute("coursesSemester", coursesNeeded);
-                    session.setAttribute("coursesCompleted", coursesTaken);
-                }
+                session.setAttribute("coursesQuarter", allCourses);
+                session.setAttribute("coursesSemester", coursesNeeded);
+                session.setAttribute("coursesCompleted", coursesTaken);
         }
 
         this.getServletContext().getRequestDispatcher(url).forward(request, response);
