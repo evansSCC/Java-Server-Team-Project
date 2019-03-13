@@ -23,10 +23,12 @@ public class CoursesDB {
         String query = "";
         if (option.equals("pcWeb")) {
             query = "SELECT * FROM courses "
-                    + "WHERE pcWeb = 'R' OR pcWeb = 'E'";
+                    + "WHERE pcWeb = 'R' OR pcWeb = 'E'" +
+                    " AND type = 'Q'";
         } else if (option.equals("integrated")) {
             query = "SELECT * FROM courses "
-                    + "WHERE integrated = 'R' OR integrated = 'E'";
+                    + "WHERE integrated = 'R' OR integrated = 'E'"+
+                    " AND type = 'Q'";
         }
         try {
             ps = connection.prepareStatement(query);
