@@ -125,103 +125,85 @@ public class Controller extends HttpServlet {
             case "process_worksheet":
                 student = (Student) session.getAttribute("student");
                 LinkedHashMap<String, Course> coursesNeeded = new LinkedHashMap<String, Course>();
+                LinkedHashMap<String, Course> coursesTaken = new LinkedHashMap<String, Course>();
                 String[] values = (String[]) request.getParameterValues("completed");
                 //LinkedHashMap<String, Course> coursesTaken = new LinkedHashMap<String, Course>();
                 LinkedHashMap<String, Course> allCourses = (LinkedHashMap) session.getAttribute("courses");
-                
+
                 //creates list of courses not taken
-                for(String c : values)
-                {
-                    if(allCourses.containsKey(c))
-                    {
-                        allCourses.remove(c);
+                if (values.length > 0) {
+                    for (String c : values) {
+                        if (allCourses.containsKey(c)) {
+                            allCourses.remove(c);
+                            try {
+                                coursesTaken.put(c, CoursesDB.getCourseByCourseId(c));
+                            } catch (Exception e) {
+
+                            }
+                        }
                     }
-                    
                 }
-                
-                
+
                 //semester
-                if(!allCourses.containsKey("INFO1121") || !allCourses.containsKey("INFO1131") || !allCourses.containsKey("INFO1211"))
-                {
-                    try
-                    {
+                if (!coursesTaken.containsKey("INFO1121") || !coursesTaken.containsKey("INFO1131") || !coursesTaken.containsKey("INFO1211")) {
+                    try {
                         coursesNeeded.put("BSADIOIO", CoursesDB.getCourseByCourseId("BSADIOIO"));
-                    }
-                    catch(Exception e)
-                    {
-                            
+                    } catch (Exception e) {
+
                     }
                 }
-                if(!allCourses.containsKey("INFO1221") || !allCourses.containsKey("INFO1428"))
-                {
-                    try
-                    {
+                if (!coursesTaken.containsKey("INFO1221") || !coursesTaken.containsKey("INFO1428")) {
+                    try {
                         coursesNeeded.put("INFO1428", CoursesDB.getCourseByCourseId("INFO1428"));
-                    }
-                    catch(Exception e)
-                    {
-                            
+                    } catch (Exception e) {
+
                     }
                 }
-                if(!allCourses.containsKey("INFO1314") || !allCourses.containsKey("INFO1414"))
-                {
-                    try
-                    {
+                if (!coursesTaken.containsKey("INFO1314") || !coursesTaken.containsKey("INFO1414")) {
+                    try {
                         coursesNeeded.put("INFO1414", CoursesDB.getCourseByCourseId("INFO1414"));
-                    }
-                    catch(Exception e)
-                    {
-                            
+                    } catch (Exception e) {
+
                     }
                 }
-                if(!allCourses.containsKey("INFO1334") || !allCourses.containsKey("INFO1434"))
-                {
-                    try
-                    {
+                if (!coursesTaken.containsKey("INFO1334") || !coursesTaken.containsKey("INFO1434")) {
+                    try {
                         coursesNeeded.put("INFO1434", CoursesDB.getCourseByCourseId("INFO1434"));
-                    }
-                    catch(Exception e)
-                    {
-                            
+                    } catch (Exception e) {
+
                     }
                 }
-                
-                if(!allCourses.containsKey("INFO2544") || !allCourses.containsKey("INFO2644"))
-                {
-                    try
-                    {
+
+                if (!coursesTaken.containsKey("INFO2544") || !coursesTaken.containsKey("INFO2644")) {
+                    try {
                         coursesNeeded.put("INFO2644", CoursesDB.getCourseByCourseId("INFO2644"));
-                    }
-                    catch(Exception e)
-                    {
-                            
+                    } catch (Exception e) {
+
                     }
                 }
-                
-                if(!allCourses.containsKey("INFO2558") || !allCourses.containsKey("INFO2638"))
-                {
-                    try
-                    {
+
+                if (!coursesTaken.containsKey("INFO2558") || !coursesTaken.containsKey("INFO2638")) {
+                    try {
                         coursesNeeded.put("INFO2638", CoursesDB.getCourseByCourseId("INFO2638"));
-                    }
-                    catch(Exception e)
-                    {
-                            
+                    } catch (Exception e) {
+
                     }
                 }
-                
-                if(!allCourses.containsKey("INFO2544") || !allCourses.containsKey("INFO2644"))
-                {
-                    try
-                    {
+
+                if (!coursesTaken.containsKey("INFO2544") || !coursesTaken.containsKey("INFO2644")) {
+                    try {
                         coursesNeeded.put("INFO2644", CoursesDB.getCourseByCourseId("INFO2644"));
-                    }
-                    catch(Exception e)
-                    {
-                            
+                    } catch (Exception e) {
+
                     }
                 }
-                session.setAttribute("courses", allCourses);
+                url = "/output.jsp";
+
+                if (values.length > 0) {
+                    session.setAttribute("coursesQuarter", allCourses);
+                    session.setAttribute("coursesSemester", coursesNeeded);
+                    session.setAttribute("coursesCompleted", coursesTaken);
+                }
         }
 
         this.getServletContext().getRequestDispatcher(url).forward(request, response);
@@ -269,13 +251,11 @@ public class Controller extends HttpServlet {
 }
 
 //Admin Database sort/comment methods - insert where appropriate
-
 //List of plans
 //String sortOption = request.getParameter("sortOption");
 //String sortOrder = request.getParameter("sortOrder");
 //LinkedHashMap<String, Plan> plansList = getPlanList(sortOption, sortOrder);
 //request.setAttribute("planList", plansList);
-
 //Get Comments By Plan ID
 //int planID = request.getParameter("planID");
 //LinkedHashMap<String, String> comments = getPlanComments(planID);
