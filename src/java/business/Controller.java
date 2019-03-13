@@ -139,8 +139,8 @@ public class Controller extends HttpServlet {
                     
                 }
                 
-                //semester
                 
+                //semester
                 if(!allCourses.containsKey("INFO1121") || !allCourses.containsKey("INFO1131") || !allCourses.containsKey("INFO1211"))
                 {
                     try
@@ -186,19 +186,41 @@ public class Controller extends HttpServlet {
                     }
                 }
                 
-                //if(!allCourses.containsKey("INFO1121"))
+                if(!allCourses.containsKey("INFO2544") || !allCourses.containsKey("INFO2644"))
+                {
+                    try
+                    {
+                        coursesNeeded.put("INFO2644", CoursesDB.getCourseByCourseId("INFO2644"));
+                    }
+                    catch(Exception e)
+                    {
+                            
+                    }
+                }
                 
-//                for(String c : values)
-//                {
-//                    try
-//                    {
-//                        coursesTaken.put(c, CoursesDB.getCourseByCourseId(c));
-//                    }
-//                    catch(Exception e)
-//                    {
-//                        
-//                    }
-//                }
+                if(!allCourses.containsKey("INFO2558") || !allCourses.containsKey("INFO2638"))
+                {
+                    try
+                    {
+                        coursesNeeded.put("INFO2638", CoursesDB.getCourseByCourseId("INFO2638"));
+                    }
+                    catch(Exception e)
+                    {
+                            
+                    }
+                }
+                
+                if(!allCourses.containsKey("INFO2544") || !allCourses.containsKey("INFO2644"))
+                {
+                    try
+                    {
+                        coursesNeeded.put("INFO2644", CoursesDB.getCourseByCourseId("INFO2644"));
+                    }
+                    catch(Exception e)
+                    {
+                            
+                    }
+                }
                 session.setAttribute("courses", allCourses);
         }
 
