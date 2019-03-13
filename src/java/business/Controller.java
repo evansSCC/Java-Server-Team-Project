@@ -152,6 +152,39 @@ public class Controller extends HttpServlet {
                             
                     }
                 }
+                if(!allCourses.containsKey("INFO1221") || !allCourses.containsKey("INFO1428"))
+                {
+                    try
+                    {
+                        coursesNeeded.put("INFO1428", CoursesDB.getCourseByCourseId("INFO1428"));
+                    }
+                    catch(Exception e)
+                    {
+                            
+                    }
+                }
+                if(!allCourses.containsKey("INFO1314") || !allCourses.containsKey("INFO1414"))
+                {
+                    try
+                    {
+                        coursesNeeded.put("INFO1414", CoursesDB.getCourseByCourseId("INFO1414"));
+                    }
+                    catch(Exception e)
+                    {
+                            
+                    }
+                }
+                if(!allCourses.containsKey("INFO1334") || !allCourses.containsKey("INFO1434"))
+                {
+                    try
+                    {
+                        coursesNeeded.put("INFO1434", CoursesDB.getCourseByCourseId("INFO1434"));
+                    }
+                    catch(Exception e)
+                    {
+                            
+                    }
+                }
                 
                 //if(!allCourses.containsKey("INFO1121"))
                 
